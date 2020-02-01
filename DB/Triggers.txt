@@ -1,0 +1,39 @@
+
+alter table [dbo].[trainee]
+add isDeleted  bit default 0
+-------------------------
+create TRIGGER trgSoftDeleteOnTrainee
+ON trainee
+INSTEAD OF DELETE
+AS
+		
+		UPDATE [dbo].[trainee]
+		SET  isDeleted=1
+		where [ID] in (select [ID] from deleted)
+--------------------------------
+------------------------------------------------------------
+alter table [dbo].[Course]
+add isDeleted bit default 0
+-------------------------
+create TRIGGER trgSoftDeleteOnCourse
+ON Course
+INSTEAD OF DELETE
+AS
+		
+		UPDATE [dbo].[Course]
+		SET  isDeleted=1
+		where [ID] in (select [ID] from deleted)
+--------------------------------
+---------------------------------------------------------
+alter table [dbo].[Instructor]
+add isDeleted bit default 0
+-------------------------
+create TRIGGER trgSoftDeleteOnInstructor
+ON [dbo].[Instructor]
+INSTEAD OF DELETE
+AS
+		
+		UPDATE [dbo].[Instructor]
+		SET  isDeleted=1
+		where [ID] in (select [ID] from deleted)
+

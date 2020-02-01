@@ -1,0 +1,36 @@
+
+create function initializeTrainee(@TraineeNo smallint) 
+returns @Trainee table
+		(
+		 TraineeID smallint primary key
+		)
+as
+begin
+	insert into @Trainee(TraineeID)(select ID from trainee where ID in(select top (@TraineeNo) ID from trainee))
+
+return
+end
+
+select * from initializeTrainee(2)
+
+--------------------------------------------------
+create function computeSucces(@traineeDegree smallint)
+returns varchar(10)
+with schemabinding
+	begin
+		declare @res varchar(10)
+		if(@traineeDegree>60)
+			begin
+			set @res='PASS'
+			end
+		else
+			begin
+			set @res='NOT PASS'
+		    end
+		return @res
+	end
+
+alter table [dbo].[TraineeExam]
+add Result as dbo.computeSucces(TraineeDegree) 
+
+----------------------
